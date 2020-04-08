@@ -1,0 +1,16 @@
+    // componentToHex(c) {
+    //     let hex = c.toString(16);
+    //     return hex.length == 1 ? "0" + hex : hex;
+    // }
+
+    // rgbToHex(r, g, b) {
+    //     return "0x" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
+    // }
+
+    // hexToRgb(hex) {
+    //     let bigint = parseInt(hex, 10);
+    //     let r = (bigint >> 16) & 255;
+    //     let g = (bigint >> 8) & 255;
+    //     let b = bigint & 255;
+    //     return r + "," + g + "," + b;
+    // }
