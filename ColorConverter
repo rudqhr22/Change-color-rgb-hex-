@@ -1,0 +1,86 @@
+function componentToHex(c) {
+    let hex = c. toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+export function HsvToRgb(h, s, v) {
+    s = s / 100, v = v / 100
+    let c = v * s
+    let hh = h / 60
+    let x = c * (1 - Math.abs(hh % 2 - 1))
+    let m = v - c
+
+    let p = parseInt(hh, 10)
+    let rgb = (
+        p === 0 ? [c, x, 0] :
+        p === 1 ? [x, c, 0] :
+        p === 2 ? [0, c, x] :
+        p === 3 ? [0, x, c] :
+        p === 4 ? [x, 0, c] :
+        p === 5 ? [c, 0, x] :
+        []
+    )
+    return {
+        r:Math.round(255 * (rgb[0] + m)),
+        g:Math.round(255 * (rgb[1] + m)),
+        b:Math.round(255 * (rgb[2] + m))
+    }
+}
+
+export function RgbToHex(r, g, b) {
+    let hex = "0x" + componentToHex(r) + componentToHex(g) + componentToHex(b);;
+    return parseInt(hex);
+}
+
+export function HsvToHex(h, s, v) {
+    let rgb = HsvToRgb(h,s,v);
+    let hex = RgbToHex(rgb.r, rgb.g, rgb.b);
+    return hex;
+}
+
+export function HexToRgb(hex) {
+    hex = hex.toString(16)
+    if(hex.length < 6) {
+        for(let i = 0; 6 - hex.length; ++i){
+            hex = '0' + hex;
+        }
+    }
+    hex = hex.replace(/ |#/g, '');
+    if (hex.length === 3) hex = hex.replace(/./g, (e, i) => {
+      let arr = [];
+      return arr[i % 1] = Array(3).join(e);
+    });
+    hex = hex.match(/../g);
+    return {
+      r: parseInt(hex[0], 16),
+      g: parseInt(hex[1], 16),
+      b: parseInt(hex[2], 16)
+    };
+}
+
+export function RgbToHsv(r, g, b) {
+    r = r/255, g = g/255, b = b/255;
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, v = max;
+
+    let d = max - min;
+    s = max == 0 ? 0 : d / max;
+
+    if(max == min){
+        h = 0; // achromatic
+    }else{
+        switch(max){
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    return {h:h, s:s, v:v};
+}
+
+export function HexToHsv(hex) {
+    let color = HexToRgb(hex);
+    return RgbToHsv(color.r, color.g, color.b);
+}
